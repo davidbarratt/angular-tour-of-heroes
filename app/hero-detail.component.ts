@@ -10,7 +10,7 @@ import { Hero } from './hero';
   selector: 'my-hero-detail',
   templateUrl: 'hero-detail.component.html',
 })
-export class HeroDetailComponent implements OnIni {
+export class HeroDetailComponent implements OnInit {
 
   @Input()
   hero: Hero;
@@ -23,7 +23,7 @@ export class HeroDetailComponent implements OnIni {
 
   ngOnInit(): void {
     this.route.params.switchMap((params: Params) => {
-      return this.heroService.getHero(parseInt(params.id));
+      return this.heroService.getHero(parseInt(params['id']));
     }).subscribe((hero) => {
       this.hero = hero
       return hero;
@@ -32,6 +32,12 @@ export class HeroDetailComponent implements OnIni {
 
   goBack(): void {
     this.location.back();
+  }
+
+  save(): void {
+    this.heroService.update(this.hero).then((hero) => {
+      return this.goBack();
+    });
   }
 
 }
